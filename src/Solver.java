@@ -6,17 +6,23 @@ import java.util.*;
  */
 public class Solver {
 
-    public class RegionScore {
+    /**
+     * Object containing both score and steps (moves/clicks) to reach that score.
+     */
+    public class StepScore {
         int score;
         ArrayList<Coord> steps;
 
-        RegionScore(int s, ArrayList<Coord> steps) {
+        StepScore(int s, ArrayList<Coord> steps) {
             score = s;
             this.steps = steps;
         }
 
     }
 
+    /**
+     * Object containing the game state (score within), region clicked, and steps to reach this state.
+     */
     public class Node {
         BrickPop bp;
         ColourSet region;
@@ -40,6 +46,11 @@ public class Solver {
         }
     }
 
+    /**
+     * Solve the game using breadth-first search.
+     * @param bp    Game to be solved
+     * @return      List of moves to make to solve the game.
+     */
     public ArrayList<Coord> solveBRFS(BrickPop bp) {
         Queue<Node> frontier = new ArrayDeque<>();
         frontier.add(new Node(bp, null));
@@ -62,10 +73,17 @@ public class Solver {
 
     public Random rand = new Random();
 
+    /**
+     * Attempt to solve the game using iterative deepening search.
+     * @param bp    The game to be solved.
+     * @param lb    Start depth for search.
+     * @param ub    Maximum search depth.
+     * @return      List of moves to make for best solution found.
+     */
     public ArrayList<Coord> solve(BrickPop bp, int lb, int ub) {
-        RegionScore bestnode = null;
+        StepScore bestnode = null;
         for (int i=lb; i <=ub; i++) {
-            RegionScore result = dfs(i, bp, new ArrayList<>());
+            StepScore result = dfs(i, bp, new ArrayList<>());
             if (bestnode==null || result.score>bestnode.score) {
                 bestnode = result;
             }
@@ -76,25 +94,32 @@ public class Solver {
 
     }
 
-    public RegionScore dfs(int depth, BrickPop bp, ArrayList<Coord> steps) {
+    /**
+     * Run a depth-first search to find the best solution.
+     * @param depth     Maximum search depth.
+     * @param bp        Game to be solved.
+     * @param steps     Steps so far to reach the given game state.
+     * @return          Score and list of moves to reach that score.
+     */
+    public StepScore dfs(int depth, BrickPop bp, ArrayList<Coord> steps) {
         if (bp.finished()) {
             System.out.println("Solution found! Depth = "+steps.size()+", Score = "+(bp.score));
-            return new RegionScore(bp.score+9000, steps);
+            return new StepScore(bp.score+9000, steps);
         }
         if (depth==0) {
-            return new RegionScore(bp.score, steps);
+            return new StepScore(bp.score, steps);
         }
         if (bp.failed()) {
-            return new RegionScore(bp.score-9000, steps);
+            return new StepScore(bp.score-9000, steps);
         }
 
         int bestScore = -9001;
-        RegionScore bestRS = null;
+        StepScore bestRS = null;
         for (ColourSet r : bp.regions) {
             if (r.colour>0 && r.size()>1 && (rand.nextFloat()>0.98 || bestRS==null) ) {
                 ArrayList<Coord> steps2 = new ArrayList<>(steps);
                 steps2.add(r.any());
-                RegionScore next = dfs(depth - 1, bp.successor(r.any()), steps2);
+                StepScore next = dfs(depth - 1, bp.successor(r.any()), steps2);
                 if (next.score >= bestScore) {
                     bestScore = next.score;
                     bestRS = next;
@@ -102,7 +127,7 @@ public class Solver {
             }
         }
         if (bestRS==null) {
-            return new RegionScore(bp.score-9000, steps);
+            return new StepScore(bp.score-9000, steps);
         };
         return bestRS;
     }

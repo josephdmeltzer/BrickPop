@@ -24,6 +24,10 @@ public class BrickPop {
         return false;
     }
 
+    /**
+     * Given any game state, calculate the different regions present
+     * and record them in the 'regions' field.
+     */
     public void setUpRegions() {
         regions.clear();
         for (int i=0; i<10; i++) {
@@ -35,6 +39,10 @@ public class BrickPop {
         }
     }
 
+    /**
+     * Removes a region from the grid, as if it was clicked on.
+     * @param c     Coordinates of any square in the region to be removed.
+     */
      void empty(Coord c) {
         if (grid[c.x][c.y] == 0) {
             return;
@@ -48,9 +56,13 @@ public class BrickPop {
                 return;
             }
         }
-    }
+     }
 
-     void fall() {
+    /**
+     * Re-align the tiles in the grid, by having them fall downwards, and then
+     * have columns 'fall' to the left.
+     */
+    void fall() {
         for (int j=0; j<10; j++) {
             List<Integer> column = new ArrayList<>();
             for (int i=0; i<10; i++) {
@@ -87,11 +99,19 @@ public class BrickPop {
         }
     }
 
+    /**
+     * Clicks a square. Empties the region it's in, and then re-aligns the grid.
+     */
     private void click(Coord c) {
         empty(c);
         fall();
     }
 
+    /**
+     * Returns a new game state representing the one that occurs after a tile is clicked on the current one.
+     * @param c     Coordinates of the square to be clicked.
+     * @return      The prospective new game state.
+     */
     public BrickPop successor(Coord c) {
         BrickPop bp = new BrickPop();
         for (int i=0; i<10; i++) {
@@ -106,10 +126,17 @@ public class BrickPop {
         return bp;
     }
 
+    /**
+     * Checks if the round is over and successful (can continue to the next round).
+     */
     public boolean finished() {
         return (grid[0][0]==0);
     }
 
+    /**
+     * Checks if the game is over (round finished but cannot continue to next round).
+     * Happens when there are unclickable tiles remaining at the end of the round.
+     */
     public boolean failed() {
         for (int n=1; n<=4; n++) {
             if (failedColour(n)) return true;
@@ -117,6 +144,10 @@ public class BrickPop {
         return false;
     }
 
+    /**
+     * Tests if a given colour has 'failed': if it exists on the grid but only as isolated single tiles.
+     * @param c     The colour to test.
+     */
     private boolean failedColour(int c) {
         int count = 0;
         for (int i=0; i<10; i++) {

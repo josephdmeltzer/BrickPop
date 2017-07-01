@@ -20,6 +20,11 @@ public class ColourSet extends HashSet<Coord> {
         }
     }
 
+    /**
+     * Performs the flood-fill algorithm to find all matching tiles around a given one.
+     * @param c     The coordinates of the tile.
+     * @param grid  The grid of all tiles.
+     */
     private void FF(Coord c, int[][] grid) {
         if (!(grid[c.x][c.y] != colour || this.contains(c))) {
             this.add(c);
@@ -29,6 +34,9 @@ public class ColourSet extends HashSet<Coord> {
         }
     }
 
+    /**
+     * Gets the coordinate of some tile in this region. May as well be random.
+     */
     public Coord any() {
         for (Coord c : this) return c;
         return null;
@@ -44,6 +52,9 @@ public class ColourSet extends HashSet<Coord> {
         return false;
     }
 
+    /**
+     * Testing for this class.
+     */
     public static void main(String[] args) {
         int[][] grid = new int[10][10];
         for (int i=0; i<10; i++) {
