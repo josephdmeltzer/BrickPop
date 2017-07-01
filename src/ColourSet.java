@@ -2,6 +2,8 @@ import java.util.HashSet;
 
 /**
  * Created by Joseph Meltzer on 30/04/2017.
+ * Definition for the 'ColourSet' class, which represents a region of the board
+ * by being a set containing the blocks in that region.
  */
 public class ColourSet extends HashSet<Coord> {
     int colour;
@@ -19,7 +21,6 @@ public class ColourSet extends HashSet<Coord> {
     }
 
     private void FF(Coord c, int[][] grid) {
-        //System.out.println("("+c.x+", "+c.y+")");
         if (!(grid[c.x][c.y] != colour || this.contains(c))) {
             this.add(c);
             for (Coord d : c.neighbours()) {
@@ -59,9 +60,5 @@ public class ColourSet extends HashSet<Coord> {
         for (Coord c : new Coord(0,0).neighbours()) {
             System.out.println("("+c.x+", "+c.y+")");
         }
-//        Set<Coord> s = new ColourSet(1);
-//        s.add(new Coord(0,0));
-//        System.out.println(s.contains(new Coord(0,0)));
-//        System.out.println(new Coord(0,0).equals(new Coord(0,0)));
     }
 }

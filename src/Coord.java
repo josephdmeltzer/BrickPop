@@ -3,6 +3,7 @@ import java.util.List;
 
 /**
  * Created by Joseph Meltzer on 30/04/2017.
+ * Two dimensional coordinate system. In-built method for finding adjacent coordinates.
  */
 public class Coord {
     public int x;

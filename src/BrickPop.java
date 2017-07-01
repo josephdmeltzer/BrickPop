@@ -5,6 +5,7 @@ import java.util.Set;
 
 /**
  * Created by Joseph Meltzer on 30/04/2017.
+ * State of, and behaviour for, the game.
  */
 public class BrickPop {
     int[][] grid;
@@ -35,66 +36,21 @@ public class BrickPop {
     }
 
      void empty(Coord c) {
-         //System.out.println("AAA"+grid[1][0]);
-
-         if (grid[c.x][c.y] == 0) {
-            //System.out.println("clicked empty, "+c);
-            //System.out.println(regions);
+        if (grid[c.x][c.y] == 0) {
             return;
         }
         for (ColourSet r : regions) {
             if (r.contains(c) && r.size()>1) {
-                //System.out.println("AAA"+r);
                 for (Coord d : r) {
                     grid[d.x][d.y] = 0;
                 }
                 score += (r.size())*(r.size()-1);
-                //System.out.println("AAA"+grid[1][0]);
                 return;
             }
         }
     }
 
      void fall() {
-//        int[][] grid2 = new int[10][10];
-//        for (int i=0; i<10; i++) {
-//            for (int j=0; j<10; j++) {
-//                grid2[i][j] = grid[i][j];
-//            }
-//        }
-//
-//        for (int i=0; i<10; i++) {
-//            List<Integer> column = new ArrayList<>();
-//            for (int j = 0; j < 10; j++) {
-//                if (grid2[i][j] != 0) column.add(grid2[i][j]);
-//            }
-//            while (column.size() < 10) {
-//                column.add(0);
-//            }
-//            for (int j = 0; j < 10; j++) {
-//                grid2[i][j] = column.get(j);
-//            }
-//        }
-//
-//        List<int[]> columns = new ArrayList<>();
-//        for (int i=0; i<10; i++) {
-//            if (!arrayZero(grid2[i])) {
-//                columns.add(grid2[i]);
-//            }
-//        }
-//        while (columns.size() < 10) {
-//            columns.add(new int[10]);
-//        }
-//        for (int i=0; i < 10; i++) {
-//            grid2[i] = columns.get(i);
-//        }
-//
-//         for (int i=0; i<10; i++) {
-//             for (int j=0; j<10; j++) {
-//                 grid[i][j] = grid2[i][j];
-//             }
-//         }
-
         for (int j=0; j<10; j++) {
             List<Integer> column = new ArrayList<>();
             for (int i=0; i<10; i++) {
@@ -129,27 +85,10 @@ public class BrickPop {
                 grid[i][j] = columns.get(j).get(i);
             }
         }
-
-
-        //System.out.println("BBB"+grid[0][0]);
-    }
-
-    private boolean arrayZero(int[] column) {
-        for (int i=0; i<10; i++) {
-            if (column[i] != 0) return false;
-        }
-        return true;
     }
 
     private void click(Coord c) {
         empty(c);
-//        System.out.println("");
-//        for (int i=10; i>=1; i--) {
-//            for (int j=1; j<=10; j++) {
-//                System.out.print(grid[i-1][j-1]+" ");
-//            }
-//            System.out.println("");
-//        }
         fall();
     }
 
@@ -161,46 +100,17 @@ public class BrickPop {
             }
         }
         bp.score = score;
-        //System.out.println("score is "+bp.score);
-        //bp.setUpRegions();
         bp.regions = new HashSet<>();
-//        for (ColourSet s : regions) {
-//            ColourSet set = new ColourSet(s.colour);
-//            for (Coord d : s) {
-//                set.add(new Coord(d.x, d.y));
-//            }
-//            bp.regions.add(set);
-//        }
         bp.setUpRegions();
         bp.click(c);
-
-        //System.out.println("score is now "+bp.score);
-
         return bp;
     }
 
     public boolean finished() {
         return (grid[0][0]==0);
-        //System.out.println(grid[0][0]);
-        //System.out.println(grid[0][1]);
-        //System.out.println(grid[1][0]);
-        //System.out.println(grid[1][1]);
-        //setUpRegions();
-        //System.out.println("After"+grid[0][0]);
-        //System.out.println(grid[0][1]);
-        //System.out.println(grid[1][0]);
-        //System.out.println(grid[1][1]);
-        //System.out.println(""+regions.size()+regions);
-        //return regions.size()==1;
     }
 
     public boolean failed() {
-//        for (ColourSet r : regions) {
-//            Coord c = r.any();
-//            ////System.out.println(r.size());
-//            if (grid[c.x][c.y] != 0 && r.size()>1) return false;
-//        }
-//        return true;
         for (int n=1; n<=4; n++) {
             if (failedColour(n)) return true;
         }
@@ -218,49 +128,11 @@ public class BrickPop {
         return count==1;
     }
 
-
+    /**
+     * Testing of this class.
+     */
     public static void main(String[] args) {
-//        BrickPop bp = new BrickPop();
-//        bp.grid[0][1] = 1;
-//        bp.grid[0][5] = 2;
-        //System.out.println(bp.grid[0][0]);
-        //System.out.println(bp.grid[0][1]);
-        //System.out.println(bp.grid[0][2]);
-        //System.out.println(bp.grid[0][5]);
-//        bp.fall();
-        //System.out.println(bp.grid[0][0]);
-        //System.out.println(bp.grid[0][1]);
-        //System.out.println(bp.grid[0][2]);
-        //System.out.println(bp.grid[0][5]);
-
-//        Set<Set<Coord>> sets = new HashSet<>();
-//        Set<Coord> set1 = new HashSet<>();
-//        set1.add(new Coord(1,1));
-//        set1.add(new Coord(3,5));
-//        Set<Coord> set2 = new HashSet<>();
-//        set2.add(new Coord(2,4));
-//        sets.add(set1);
-//        sets.add(set2);
-//
-//
-//        Set<Set<Coord>> clone = new HashSet<>();
-//        for (Set<Coord> s : sets) {
-//            Set<Coord> set = new HashSet<>();
-//            for (Coord c : s) {
-//                set.add(new Coord(c.x, c.y));
-//            }
-//            clone.add(set);
-//        }
-//
-//        System.out.println(clone.contains(set1));
-
         BrickPop bp = new BrickPop();
-
-        //String input = "1 1 2 4 3 1 1 2 5 5\n1 4 2 3 5 3 1 3 4 5\n5 5 1 3 5 1 3 3 4 5\n2 5 1 3 3 1 2 1 4 5\n2 5 4 5 3 2 3 1 4 3\n1 1 4 2 3 1 4 1 1 3\n5 3 4 2 3 5 4 4 1 5\n2 2 4 2 5 3 1 4 1 4\n2 2 5 2 3 3 5 4 1 1\n5 3 3 5 3 3 3 5 1 4";
-        //String input = "0 0 0 0 0 0 0 0 0 0\n0 0 2 0 0 0 0 0 0 0\n1 1 2 0 0 0 0 0 0 0\n1 4 1 0 0 0 0 0 0 0\n5 5 1 0 0 0 1 0 0 0\n2 5 4 0 0 0 1 0 0 0\n2 5 4 0 0 0 3 0 0 0\n1 1 4 0 0 1 2 2 0 0\n5 3 4 0 0 2 3 3 0 0\n5 3 3 4 3 1 1 3 0 0";
-//        String input = "6 2 6 2 2 4 1 6 2 1\n3 4 6 2 6 4 6 6 5 1\n3 4 1 6 6 2 6 2 5 5\n3 5 2 1 2 2 5 5 5 5\n6 3 2 1 5 1 4 6 2 5\n2 3 2 1 1 1 4 3 2 5\n3 5 6 5 5 6 4 4 6 5\n2 1 5 5 5 6 3 3 6 1\n4 5 4 4 2 3 3 6 6 1\n4 4 4 4 4 5 3 3 3 1";
-        //String input = "4 1 5 6 6 1 5 5 6 1\n1 1 6 6 4 1 6 6 5 1\n1 1 1 6 4 1 6 6 3 1\n4 3 3 6 4 1 6 3 2 1\n3 3 5 3 4 1 3 3 4 1\n5 5 1 6 4 2 5 2 4 1\n4 5 6 6 6 2 2 4 5 1\n5 5 2 3 3 2 2 3 1 1\n5 1 2 6 3 2 3 5 1 4\n1 2 2 2 2 3 5 5 5 4";
-        //String input = "1 2 4 1 3 3 3 3 4 6\n1 2 4 6 1 2 3 3 4 6\n1 4 2 6 6 3 2 3 4 2\n1 4 2 1 6 1 4 4 5 2\n5 4 1 1 3 1 2 2 4 2\n5 5 5 3 2 5 3 4 4 2\n5 5 3 5 5 2 3 5 5 2\n1 2 2 2 2 2 2 2 6 2\n4 3 3 2 6 3 1 1 2 2\n4 3 3 6 1 3 2 3 2 2";
         String input = "4 1 5 2 2 2 4 6 5 5\n5 4 5 2 2 2 6 6 5 5\n3 5 5 1 2 2 6 6 3 4\n3 3 2 1 2 6 2 2 4 4\n1 6 6 1 5 2 4 4 3 4\n1 5 5 1 5 4 1 4 3 3\n4 3 2 5 5 4 3 1 3 3\n4 4 3 2 6 1 3 3 1 1\n4 4 4 2 6 1 3 3 6 6\n4 4 3 2 6 1 1 1 1 1";
         input = "5 6 1 4 1 1 1 4 5 5\n6 6 6 6 1 1 5 4 4 5\n6 2 1 1 2 5 4 3 3 5\n6 2 4 1 2 2 4 2 3 2\n2 5 4 2 2 2 3 2 1 5\n2 3 4 2 1 4 3 2 2 1\n2 3 4 2 5 4 3 1 1 1\n2 3 2 5 4 4 6 3 1 1\n3 1 1 5 6 6 6 3 3 1\n3 1 1 1 1 5 6 6 6 5";
 
@@ -272,7 +144,6 @@ public class BrickPop {
 
         for (int i=0; i<10; i++) {
             for (int j=0; j<10; j++) {
-                //System.out.println(sgrid[j][9-i]);
                 bp.grid[i][j] = Integer.parseInt(sgrid[9-i][j]);
             }
         }
@@ -327,7 +198,6 @@ public class BrickPop {
             }
             System.out.println("");
         }
-//        for (int i : bp.grid[0]) System.out.print(i+" ");
     }
 
 }
